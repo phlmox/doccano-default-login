@@ -41,14 +41,16 @@ for url in urls:
                 continue
 
         for r in routes:
-                ar = requests.post(u+r,verify=False,headers={"Content-Type":"application/json;charset=UTF-8"},data='{"username":"admin","password":"password"}')
-                if any(x in ar.text for x in ['"token":','"key":']):
-                        print("[+] Yaay: "+u)
-                        found.append(u)
-                if "Unable to log in with provided credentials" in ar.text:
-                        passed=False
-                        print("[-] Nope: "+u)
-                        break
+                try:
+                        ar = requests.post(u+r,verify=False,headers={"Content-Type":"application/json;charset=UTF-8"},data='{"username":"admin","password":"password"}')
+                        if any(x in ar.text for x in ['"token":','"key":']):
+                                print("[+] Yaay: "+u)
+                                found.append(u)
+                        if "Unable to log in with provided credentials" in ar.text:
+                                passed=False
+                                print("[-] Nope: "+u)
+                                break
+                except:pass
 
 if args.output:
         with open(args.output,"w") as f:
